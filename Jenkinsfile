@@ -12,7 +12,7 @@ pipeline {
         }
         stage('Build and Scan') {
             steps {
-                withCredentials([string(credentialsId:'sonar_token', variable:'SONAR_TOKEN')]) {
+                withCredentials([string(credentialsId:'sonar_id', variable:'SONAR_TOKEN')]) {
                 withSonarQubeEnv('SONAR') {
                     sh """ mvn package sonar:sonar \
                           -Dsonar.projectKey=shivanandinisaddanapu \
@@ -25,12 +25,13 @@ pipeline {
         }
     }
 
+
     post {
         always{
             archiveArtifacts artifacts: '**/*.jar'
             junit '**/surefire-reports/*.xml'
         }
-    }
+    } 
 
 
 }
