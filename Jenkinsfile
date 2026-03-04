@@ -5,6 +5,10 @@ pipeline {
         pollSCM('H/5 * * * *')
     }
 
+    parameters {
+        string(name: 'goals', choices: ['package', 'clean install', 'verify'], description: '')
+    }
+
     stages {
 
         stage('Checkout Code') {
@@ -25,7 +29,7 @@ pipeline {
                 withCredentials([string(credentialsId:'sonar', variable:'SONAR_TOKEN')]) {
                 withSonarQubeEnv('SONAR') {
                      sh """
-                        mvn package sonar:sonar \
+                        mvn ${params.goals} sonar:sonar \
                         -Dsonar.projectKey=shivanandinisaddanapu \
                         -Dsonar.organization=shivanandinisaddanapu \
                         -Dsonar.host.url=https://sonarcloud.io \
