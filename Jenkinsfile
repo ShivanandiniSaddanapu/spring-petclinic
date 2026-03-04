@@ -22,7 +22,8 @@ pipeline {
 
         stage('SonarCloud Analysis') {
             steps {
-                withCredentials([string(credentialsId: 'sonar', variable: 'SONAR_TOKEN')]) {
+                withCredentials([string(credentialsId:'sonar', variable:'SONAR_TOKEN')]) {
+                withSonarQubeEnv('sonar')   {
                     sh """
                         mvn sonar:sonar \
                         -Dsonar.projectKey=shivanandinisaddanapu \
@@ -41,4 +42,5 @@ pipeline {
             junit allowEmptyResults: true, testResults: '**/target/surefire-reports/*.xml'
         }
     }
+   }
 }
