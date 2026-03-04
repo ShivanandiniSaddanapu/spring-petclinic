@@ -35,12 +35,12 @@ pipeline {
             }
         }
     }
-
+    }
     post {
         always {
             archiveArtifacts artifacts: '**/target/*.jar', allowEmptyArchive: true
             junit allowEmptyResults: true, testResults: '**/target/surefire-reports/*.xml'
         }
     }
-   }
+   
 }
