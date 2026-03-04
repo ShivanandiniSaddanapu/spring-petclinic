@@ -23,9 +23,9 @@ pipeline {
         stage('SonarCloud Analysis') {
             steps {
                 withCredentials([string(credentialsId:'sonar', variable:'SONAR_TOKEN')]) {
-                withSonarQubeEnv('sonar')   {
-                    sh """
-                        mvn sonar:sonar \
+                withSonarQubeEnv('SONAR') {
+                     sh """
+                        mvn package sonar:sonar \
                         -Dsonar.projectKey=shivanandinisaddanapu \
                         -Dsonar.organization=shivanandinisaddanapu \
                         -Dsonar.host.url=https://sonarcloud.io \
