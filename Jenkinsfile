@@ -1,37 +1,44 @@
 pipeline {
-    agent { label 'spc'}
+    agent { label 'spc' }
+
     triggers {
-        pollSCM('* * * * *')
+        pollSCM('H/5 * * * *')
     }
+
     stages {
-        stage('git checkout') {
+
+        stage('Checkout Code') {
             steps {
                 git url: 'https://github.com/ShivanandiniSaddanapu/spring-petclinic.git',
                     branch: 'main'
             }
         }
-        stage('Build and Scan') {
+
+        stage('Build Project') {
             steps {
-                withCredentials([string(credentialsId:'sonar', variable:'SONAR_TOKEN')]) {
-                withSonarQubeEnv('SONAR') {
-                    sh """ mvn package sonar:sonar \
-                          -Dsonar.projectKey=shivanandinisaddanapu \
-                          -Dsonar.organization=shivanandinisaddanapu \
-                          -Dsonar.host.url=https://sonarcloud.io/ \
-                          -Dsonar.login=$SONAR_TOKEN """
-                }
+                sh 'mvn clean verify'
+            }
+        }
+
+        stage('SonarCloud Analysis') {
+            steps {
+                withCredentials([string(credentialsId: 'sonar', variable: 'SONAR_TOKEN')]) {
+                    sh """
+                        mvn sonar:sonar \
+                        -Dsonar.projectKey=shivanandinisaddanapu \
+                        -Dsonar.organization=shivanandinisaddanapu \
+                        -Dsonar.host.url=https://sonarcloud.io \
+                        -Dsonar.login=$SONAR_TOKEN
+                    """
                 }
             }
         }
     }
 
-
     post {
-        always{
-            archiveArtifacts artifacts: '**/*.jar'
-            junit '**/surefire-reports/*.xml'
+        always {
+            archiveArtifacts artifacts: '**/target/*.jar', allowEmptyArchive: true
+            junit allowEmptyResults: true, testResults: '**/target/surefire-reports/*.xml'
         }
-    } 
-
-
+    }
 }
