@@ -6,7 +6,7 @@ pipeline {
     }
 
     parameters {
-        choice(name: 'goals', choice: ['package', 'clean install', 'verify'], description: '')
+        choice(name: 'goals', choices: ['package', 'clean install', 'verify'], description: '')
     }
 
     stages {
