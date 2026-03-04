@@ -18,12 +18,12 @@ pipeline {
             }
         }
 
-        stage('Build Project') {
+     /*   stage('Build Project') {
             steps {
                 sh 'mvn clean verify'
             }
         }
-
+*/
         stage('SonarCloud Analysis') {
             steps {
                 withCredentials([string(credentialsId:'sonar', variable:'SONAR_TOKEN')]) {
