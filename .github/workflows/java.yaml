@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    name: my-spc            # ✅ removed "-"
+    name: my-spc
     runs-on: self-hosted
 
     steps:
@@ -18,15 +18,14 @@ jobs:
         run: mvn package
 
       - name: Build and Analyze
-        uses: sonarsource/sonarqube-scan-action@v5
+        uses: SonarSource/sonarqube-scan-action@v2   # ✅ correct version
 
         env:
           SONAR_TOKEN: ${{ secrets.spc }}
           SONAR_HOST_URL: ${{ vars.SONAR_HOST_URL }}
 
-      - uses: SonarSource/sonarqube-scan-action@<action version>
         with:
-        args:
-          -Dsonar.organization= ShivanandiniSaddanapu 
-          -Dsonar.projectName= petclinic
-          -Dsonar.projectKey= shivanandinisaddanapu   
+          args: >
+            -Dsonar.organization=ShivanandiniSaddanapu
+            -Dsonar.projectName=petclinic
+            -Dsonar.projectKey=shivanandinisaddanapu
