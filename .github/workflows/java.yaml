@@ -23,7 +23,7 @@ jobs:
             -Dsonar.projectKey=shivanandinisaddanapu \
             -Dsonar.organization=shivanandinisaddanapu \
             -Dsonar.host.url=https://sonarcloud.io \
-            -Dsonar.login=${{ secrets.spc }}
+#            -Dsonar.login=${{ secrets.spc }}
        
        
        
