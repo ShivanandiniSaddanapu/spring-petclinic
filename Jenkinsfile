@@ -9,6 +9,13 @@ pipeline {
         choice(name: 'goals', choices: ['package', 'clean install', 'verify'], description: '')
     }
 
+    environment {
+        image_name = 'spc'
+        tag_name = '1.0'
+    }
+
+
+
     stages {
 
         stage('Checkout Code') {
@@ -40,26 +47,37 @@ pipeline {
         }
     }
 */
-    stage('docker image push to ecr and pulling from dockerhub') {
+    stage('spc java docker image build') {
         steps {
-            sh """docker image pull nginx:1.29 && \
-                  aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 239500134360.dkr.ecr.ap-south-1.amazonaws.com && \
-                  docker tag nginx:1.29 239500134360.dkr.ecr.ap-south-1.amazonaws.com/dev/spcimage:latest && \
-                  docker push 239500134360.dkr.ecr.ap-south-1.amazonaws.com/dev/spcimage:latest"""
+            sh "docker image build -t ${image_name}:${tag_name} ."
             }
+    }
+
+    stage('Trivy scan for Image') {
+        steps{
+            sh "trivy image ${image_name}:${tag_name}"
         }
+    } 
+
+    stage('Image push to ECR') {
+        steps{
+            sh """
+            aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 239500134360.dkr.ecr.ap-south-1.amazonaws.com  && \
+            docker tag ${image_name}:${tag_name} 239500134360.dkr.ecr.ap-south-1.amazonaws.com/dev/spcimage:latest && \
+            docker image ls && \
+            docker push 239500134360.dkr.ecr.ap-south-1.amazonaws.com/dev/spcimage:latest"""
+        }
+    }  
+
+    stage('deploy to k8s for dev env') {
+        steps{
+            sh 'kubectl apply -f deploy-k8s/.'
+        }
+    } 
 
     }
 
-
-
-
-
-
-
-
-
-    }
+}
 
 
 //    post {
