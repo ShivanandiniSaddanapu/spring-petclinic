@@ -72,7 +72,11 @@ pipeline {
 
     stage('deploy to k8s for dev env') {
         steps{
-            sh 'kubectl apply -f deploy-k8s/.'
+            withKubeConfig([credentialsId: 'myeks']) {
+                sh 'kubectl apply -f deploy-k8s/.'
+
+            }
+            
         }
     } 
 
