@@ -73,6 +73,7 @@ pipeline {
     stage('deploy to k8s for dev env') {
         steps{
             withKubeConfig([file(credentialsId: 'myeks', variable: 'KUBECONFIG')]) {
+                export KUBECONFIG=$KUBECONFIG
                 sh 'kubectl apply -f deploy-k8s/.'
 
             }
