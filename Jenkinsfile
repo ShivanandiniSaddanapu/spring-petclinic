@@ -10,8 +10,8 @@
     //}
 
     //environment {
-        image_name = 'spc'
-        tag_name = '1.0'
+    //    image_name = 'spc'
+    //    tag_name = '1.0'
     //}
 
 
