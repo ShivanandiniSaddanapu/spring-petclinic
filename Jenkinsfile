@@ -1,4 +1,5 @@
-@Library ('my-shared-library')
+@Library('my-shared-library') _
+
 pipeline {
     agent {
         label 'spc'
@@ -7,8 +8,7 @@ pipeline {
     stages {
         stage('git checkout') {
             steps {
-                git url: 'https://github.com/ShivanandiniSaddanapu/spring-petclinic.git',
-                branch: 'main'
+                git branch: 'main', url: 'https://github.com/ShivanandiniSaddanapu/spring-petclinic.git'
             }
         }
 
