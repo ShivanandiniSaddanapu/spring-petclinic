@@ -100,21 +100,21 @@
 /* Shared Library */
 
 @Library ('my-shared-library')
-pipeline{
-    agent{
+pipeline {
+    agent {
         label 'spc'
     }
 
-    stages{
+    stages {
         stage('git checkout') {
-            steps{
+            steps {
                 git url: 'https://github.com/ShivanandiniSaddanapu/spring-petclinic.git'
                 branch: 'main'
             }
         }
 
         stage('build') {
-            steps{
+            steps {
                 build()
             }
         }
